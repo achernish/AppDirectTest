@@ -66,23 +66,23 @@ public class IntegrationServiceImpl implements IntegrationService {
 
         switch (event.getEventType()) {
             case SUBSCRIPTION_ORDER:
-                return processSubscriptionOrderEvent(event);
+                return handleSubscriptionOrderEvent(event);
 
             case SUBSCRIPTION_CHANGE:
-                return processSubscriptionChangeEvent(event);
+                return handleSubscriptionChangeEvent(event);
 
             case SUBSCRIPTION_CANCEL:
-                return processSubscriptionCancelEvent(event);
+                return handleSubscriptionCancelEvent(event);
 
             case SUBSCRIPTION_NOTICE:
-                return processSubscriptionNoticeEvent(event);
+                return handleSubscriptionNoticeEvent(event);
 
             default:
                 return new Result(false, ErrorCode.UNKNOWN_ERROR, "Event type is not supported: " + String.valueOf(event.getEventType()));
         }
     }
 
-    private Result processSubscriptionOrderEvent(Event event) {
+    private Result handleSubscriptionOrderEvent(Event event) {
         SubscriptionOrderEvent subscriptionOrderEvent = new SubscriptionOrderEvent(event.getEventXmlDocument());
 
         Customer existingCustomer = customerService.getCustomerByOpenId(subscriptionOrderEvent.getOpenId());
@@ -103,7 +103,7 @@ public class IntegrationServiceImpl implements IntegrationService {
         return result;
     }
 
-    private Result processSubscriptionChangeEvent(Event event) {
+    private Result handleSubscriptionChangeEvent(Event event) {
         SubscriptionChangeEvent subscriptionChangeEvent = new SubscriptionChangeEvent(event.getEventXmlDocument());
 
         Customer customer = this.customerService.getCustomerById(subscriptionChangeEvent.getId());
@@ -118,7 +118,7 @@ public class IntegrationServiceImpl implements IntegrationService {
         return new Result(true, String.format("Customer with identifier %d has been updated.", customer.getId()));
     }
 
-    private Result processSubscriptionCancelEvent(Event event) {
+    private Result handleSubscriptionCancelEvent(Event event) {
         SubscriptionCancelEvent subscriptionCancelEvent = new SubscriptionCancelEvent(event.getEventXmlDocument());
 
         Customer customer = this.customerService.getCustomerById(subscriptionCancelEvent.getId());
@@ -132,7 +132,7 @@ public class IntegrationServiceImpl implements IntegrationService {
         return new Result(true, String.format("Customer with identifier %s has been deleted.", customer.getId()));
     }
 
-    private Result processSubscriptionNoticeEvent(Event event) {
+    private Result handleSubscriptionNoticeEvent(Event event) {
         return new Result(true, "Dummy notice success.");
     }
 }
