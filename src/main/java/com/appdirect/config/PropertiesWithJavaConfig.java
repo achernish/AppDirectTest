@@ -1,0 +1,19 @@
+package com.appdirect.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+
+/**
+ * @author Anatoly Chernysh
+ */
+@Configuration
+@PropertySource({"classpath:application.properties"})
+public class PropertiesWithJavaConfig {
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
+}
